@@ -12,9 +12,9 @@ namespace Services.Implementations
 
             var mail = new MailMessage();
 
-            var SmtpServer = new SmtpClient("barnamenevis.ir");
+            var SmtpServer = new SmtpClient("shop.ir");
 
-            mail.From = new MailAddress(defaultEmail, "فروشگاه انگولار");
+            mail.From = new MailAddress(defaultEmail, "فروشگاه");
 
             mail.To.Add(to);
 

@@ -1,24 +1,28 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace WebFramework.CustomMapping
 {
     public static class AutoMapperConfiguration
     {
-        public static void InitializeAutoMapper()
+        public static void InitializeAutoMapper(this IServiceCollection services, params Assembly[] assemblies)
         {
-            //var mapperConfig = new MapperConfiguration(config =>
-            //{
-            //    config.AddCustomMappingProfile();
-            //});
+            //With AutoMapper Instance, you need to call AddAutoMapper services and pass assemblies that contains automapper Profile class
+            //services.AddAutoMapper(assembly1, assembly2, assembly3);
+            //See http://docs.automapper.org/en/stable/Configuration.html
+            //And https://code-maze.com/automapper-net-core/
 
-            ////Compile mapping after configuration to boost map speed
-            //Mapper.Configuration.CompileMappings();
+            services.AddAutoMapper(config =>
+            {
+                AddCustomMappingProfile((IMapperConfigurationExpression)config);
+            }, assemblies);
         }
 
         public static void AddCustomMappingProfile(this IMapperConfigurationExpression config)
         {
-            config.AddCustomMappingProfile(Assembly.GetEntryAssembly());
+            //AddCustomMappingProfile(config, new[] {Assembly.GetEntryAssembly()});
+            AddCustomMappingProfile(config, new[] { Assembly.GetExecutingAssembly() });
         }
 
         public static void AddCustomMappingProfile(this IMapperConfigurationExpression config, params Assembly[] assemblies)
@@ -32,6 +36,8 @@ namespace WebFramework.CustomMapping
             var profile = new CustomMappingProfile(list);
 
             config.AddProfile(profile);
+
+            //config.AddProfile<BranchTestProfile>();
         }
     }
 }

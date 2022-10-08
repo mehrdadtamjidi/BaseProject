@@ -17,6 +17,7 @@ namespace Services.DTOs.Account
 
     public enum LoginUserResult
     {
+
         Success,
         IncorrectData,
         NotActivated
